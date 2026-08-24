@@ -16,32 +16,38 @@ public class AppLibros {
 
 	public static EntityManagerFactory entityManagerFactory;
 
-	public static void main(String[] args) throws Exception {
-		Map<String, String> env = System.getenv();
-		for (String string : env.keySet()) {
-			System.out.println(string + ": " + env.get(string));
-		}
-		
-		entityManagerFactory = createEntityManagerFactory();
-		System.out.println("✓ EntityManagerFactory created");
-		
-		String strport = System.getenv("PORT");
-		if (strport == null){
-			strport = "8080";
-		}
-		Integer port = Integer.parseInt(strport);
-		System.out.println("✓ Port: " + port);
+	public static void main(String[] args) {
+		try {
+			Map<String, String> env = System.getenv();
+			for (String string : env.keySet()) {
+				System.out.println(string + ": " + env.get(string));
+			}
+			
+			entityManagerFactory = createEntityManagerFactory();
+			System.out.println("✓ EntityManagerFactory created");
+			
+			String strport = System.getenv("PORT");
+			if (strport == null){
+				strport = "8080";
+			}
+			Integer port = Integer.parseInt(strport);
+			System.out.println("✓ Port: " + port);
 
-		System.out.println("Starting Javalin...");
-		Javalin app = Javalin.create().start(port);
-		System.out.println("✓ Javalin started on port " + port);
-		
-		LibrosController controller = new LibrosController(entityManagerFactory); 
-		
-		app.get("/libros", controller::listLibros);
-		app.post("/libros", controller::addLibro);
-		
-		System.out.println("✓ Routes registered, app is running");
+			System.out.println("Starting Javalin...");
+			Javalin app = Javalin.create().start(port);
+			System.out.println("✓ Javalin started on port " + port);
+			
+			LibrosController controller = new LibrosController(entityManagerFactory); 
+			
+			app.get("/libros", controller::listLibros);
+			app.post("/libros", controller::addLibro);
+			
+			System.out.println("✓ Routes registered, app is running");
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			System.err.println("FATAL ERROR: " + ex.getMessage());
+			System.exit(1);
+		}
 	}
 	
 	
