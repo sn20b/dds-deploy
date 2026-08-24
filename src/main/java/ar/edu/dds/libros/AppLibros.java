@@ -77,7 +77,7 @@ public class AppLibros {
 			}
 			// no se pueden poner variables de entorno con "." en la key
 			String key2 = key.replace("__",".");
-			if (env.containsKey(key)) {
+			if (env.containsKey(key) && !key.equals("DATABASE_URL")) {
 				String value = env.get(key);
 				configOverrides.put(key2, value);
 			}
